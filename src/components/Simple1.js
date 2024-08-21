@@ -9,16 +9,24 @@ export default function Simple1() {
   const[gender,setGender]=useState('');
   const[address,setAddress]=useState('');
   const [entries, setEntries] = useState([]);
+  const[editIndex,setEditIndex]=useState('');
   
 
   const handleSave = () => {
-  console.log('Saved:', { name, age, gender, address });
-  const newEntry = { name, age, gender, address };
-  setEntries([...entries, newEntry]);
-  setName('');
-  setAge('');
-  setGender('');
-  setAddress('');
+    if (editIndex !== null) {
+        const updatedEntries = [...entries];
+        updatedEntries[editIndex] = { name, age, gender, address };
+       setEntries(updatedEntries);
+       setEditIndex(null); 
+    } 
+    else {
+      const newEntry = { name, age, gender, address };
+      setEntries([...entries, newEntry]);
+    }
+    setName('');
+    setAge('');
+    setGender('');
+    setAddress('');
 };
 
 const handleCancel = () => {
@@ -28,10 +36,20 @@ const handleCancel = () => {
   setAddress('');
 };
 
- const handleEdit =()=>{
-  
+ const handleEdit =(index)=>{
+  const entry = entries[index];
+    setName(entry.name);
+    setAge(entry.age);
+    setGender(entry.gender);
+    setAddress(entry.address);
+    setEditIndex(index);
  }
 
+ const handleDelete=(index)=> {
+  const updatedEntries = entries.filter((_, i) => i !== index);
+  setEntries(updatedEntries);
+   }
+ 
  return (
     <>
     <div className='container'>
@@ -106,11 +124,11 @@ const handleCancel = () => {
                     <TableCell>{entry.age}</TableCell>
                     <TableCell>{entry.gender}</TableCell>
                     <TableCell>{entry.address}</TableCell>
-                    <IconButton>
-                      <Edit style={{marginRight:'10px'}} onClick={handleEdit} />
+                    <IconButton onClick={()=>handleEdit(index)} color='primary'>
+                      <Edit style={{marginRight:'2px'}}/>
                     </IconButton>
-                    <IconButton>
-                      <Delete />
+                    <IconButton onClick={()=>handleDelete(index)} color='secondary'>
+                       <Delete/>
                     </IconButton>
                 </TableRow>
                 ))}
