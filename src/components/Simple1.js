@@ -46,7 +46,7 @@ const handleCancel = () => {
  }
 
  const handleDelete=(index)=> {
-  const updatedEntries = entries.filter((_, i) => i !== index);
+  const updatedEntries = entries.filter((i) => i !== index);
   setEntries(updatedEntries);
    }
  
